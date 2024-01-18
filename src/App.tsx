@@ -1,29 +1,31 @@
-import { Button } from '@mui/material';
-import { useRequest } from 'ahooks';
-import Mock from 'mockjs';
+import { Card, Container, Grid } from '@mui/material';
+import Demo1 from './demos/Demo1';
 
 const App: React.FC = () => {
-  const { data, params, loading, run } = useRequest<{ text: string; time: number }>(() => {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve({
-          text: Mock.mock('@paragraph'),
-          time: new Date().getTime(),
-        });
-      }, 3000);
-    });
-  });
-
-  console.log('%c params:', 'color: red', params);
   return (
-    <div className='w-[1200px] mx-auto mt-20'>
-      <Button variant='contained' onClick={run}>
-        Click
-      </Button>
-      <div className='text-[red]'> {loading && 'loading'}</div>
-      <p>{data?.time}</p>
-      <p>{data?.text}</p>
-    </div>
+    <Container maxWidth='lg'>
+      <div className='min-h-[100vh] pt-12'>
+        <Grid container spacing='16'>
+          <Wrapper title='Demo1' xs={12} content={<Demo1 />} />
+        </Grid>
+      </div>
+    </Container>
+  );
+};
+
+interface WrapperProps {
+  content: React.ReactNode;
+  title?: string;
+  xs?: number;
+}
+const Wrapper: React.FC<WrapperProps> = ({ content, title = 'Demo', xs = 6 }) => {
+  return (
+    <Grid item xs={xs}>
+      <Card className='min-h-12 p-6'>
+        <h6 className='font-semibold pb-2'>{title}</h6>
+        {content}
+      </Card>
+    </Grid>
   );
 };
 
