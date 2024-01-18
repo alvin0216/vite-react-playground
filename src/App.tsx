@@ -1,5 +1,6 @@
 import { Card, Container, Grid } from '@mui/material';
 import Demo1 from './demos/Demo1';
+import Demo2 from './demos/Demo2';
 
 const App: React.FC = () => {
   return (
@@ -7,6 +8,7 @@ const App: React.FC = () => {
       <div className='min-h-[100vh] pt-12'>
         <Grid container spacing='16'>
           <Wrapper title='Demo1' xs={12} content={<Demo1 />} />
+          <Wrapper title='Demo2' xs={12} content={<Demo2 />} />
         </Grid>
       </div>
     </Container>
