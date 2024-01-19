@@ -1,30 +1,19 @@
-import { Button } from '@mui/material';
-import { useRequest } from 'ahooks';
-import Mock from 'mockjs';
+import { Button } from "@mui/material";
+import Mock from "mockjs";
+
+const data = Mock.mock("@paragraph");
 
 const Demo1: React.FC = () => {
-  const { data, params, loading, run } = useRequest<{ text: string; time: number }>(() => {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve({
-          text: Mock.mock('@paragraph'),
-          time: new Date().getTime(),
-        });
-      }, 3000);
-    });
-  });
+    return (
+        <>
+            <Button variant="contained">Click</Button>
+            <div className="text-cyan-500">{data}</div>
 
-  console.log('%c params:', 'color: red', params);
-  return (
-    <>
-      <Button variant='contained' onClick={run}>
-        Click
-      </Button>
-      <div className='text-[red]'> {loading && 'loading'}</div>
-      <p>{data?.time}</p>
-      <p>{data?.text}</p>
-    </>
-  );
+            <button className="bg-sky-700 px-4 py-2 text-white hover:bg-sky-800 sm:px-8 sm:py-3">
+                ...
+            </button>
+        </>
+    );
 };
 
 export default Demo1;
