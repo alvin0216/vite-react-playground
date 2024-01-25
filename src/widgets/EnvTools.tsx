@@ -1,19 +1,23 @@
 import { Collapse } from 'antd';
 import ManagerConfigJson from './ManagerConfigJson';
 import ManagerSMBInfo from './ManagerSMBInfo';
-const { Panel } = Collapse;
+import { CollapseProps } from 'antd/lib';
+
+const items: CollapseProps['items'] = [
+  {
+    key: 'configJson',
+    label: 'config.json',
+    children: <ManagerConfigJson />,
+  },
+  {
+    key: 'smbInfo',
+    label: 'smbInfo.json',
+    children: <ManagerSMBInfo />,
+  },
+];
 
 const EnvTools: React.FC = () => {
-  return (
-    <Collapse defaultActiveKey={['configJson,smbInfo']}>
-      <Panel key='configJson' header='config.json'>
-        <ManagerConfigJson />
-      </Panel>
-      <Panel key='smbInfo' header='smbInfo.json'>
-        <ManagerSMBInfo />
-      </Panel>
-    </Collapse>
-  );
+  return <Collapse defaultActiveKey={['configJson', 'smbInfo']} items={items} />;
 };
 
 export default EnvTools;

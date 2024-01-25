@@ -10,11 +10,13 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@ant-design/icons": "^5.2.6",
     "@ant-design/pro-components": "^2.6.48",
     "@unocss/reset": "^0.58.4",
     "ahooks": "^3.7.8",
     "antd": "^5.13.2",
     "mockjs": "^1.1.0",
+    "rc-tween-one": "^3.0.6",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-json-view": "^1.21.3"
