@@ -3,12 +3,18 @@ import ManagerConfigJson from './ManagerConfigJson';
 import ManagerSMBInfo from './ManagerSMBInfo';
 import { CollapseProps } from 'antd/lib';
 import ManagerHypothesis from './ManagerHypothesis';
+import ManagerMachineInfo from './ManagerMachineInfo';
 
 const items: CollapseProps['items'] = [
   {
     key: 'configJson',
     label: 'config.json',
     children: <ManagerConfigJson />,
+  },
+  {
+    key: 'machineInfo',
+    label: 'machineInfo',
+    children: <ManagerMachineInfo />,
   },
   {
     key: 'smbInfo',
@@ -23,7 +29,7 @@ const items: CollapseProps['items'] = [
 ];
 
 const EnvTools: React.FC = () => {
-  return <Collapse defaultActiveKey={['configJson', 'smbInfo']} items={items} />;
+  return <Collapse defaultActiveKey={['machineInfo']} items={items} />;
 };
 
 export default EnvTools;
