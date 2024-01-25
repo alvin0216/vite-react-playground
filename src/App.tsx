@@ -1,9 +1,12 @@
-import Demo1 from './demos/Demo1';
+import { Card } from 'antd';
+import EnvTools from './widgets/EnvTools';
 
 const App: React.FC = () => {
   return (
     <div className='container mx-auto'>
-      <Demo1 />
+      <Card title='xxx'>
+        <EnvTools />
+      </Card>
     </div>
   );
 };

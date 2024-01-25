@@ -1,7 +1,12 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+html {
+  font-size: 4px;
+}
 
-body {
-  background-color: #f3f6f999;
+.main-tabs .ant-tabs-nav {
+  padding: 0 24px;
+  margin-bottom: 0;
+}
+
+.main-tabs .ant-tabs-tabpane {
+  padding: 24px;
 }
