@@ -1,4 +1,4 @@
-import { Collapse } from 'antd';
+import { Button, Collapse, Space } from 'antd';
 import ManagerConfigJson from './ManagerConfigJson';
 import ManagerSMBInfo from './ManagerSMBInfo';
 import { CollapseProps } from 'antd/lib';

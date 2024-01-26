@@ -89,7 +89,7 @@ const TagEditor: React.FC = () => {
         }
         const isLongTag = tag.length > 20;
         const tagElem = (
-          <Tag key={tag} closable={index !== 0} style={{ userSelect: 'none' }} onClose={() => handleClose(tag)}>
+          <Tag key={tag} closable bordered={false} style={{ userSelect: 'none' }} onClose={() => handleClose(tag)}>
             <span
               onDoubleClick={(e) => {
                 if (index !== 0) {

@@ -1,11 +1,9 @@
 import { createContext } from 'react';
 import { useSetState } from 'ahooks';
+import smbInfo from '../mock/smbInfo.json';
 
 const defaultState: StoreState = {
-  smbInfo: {
-    LenovoSerialNumber: 'xxxx',
-    MTM: 'xxxxUS',
-  },
+  smbInfo,
   hypothesis: undefined,
   envConfig: undefined,
   betaEnvConfig: undefined,
