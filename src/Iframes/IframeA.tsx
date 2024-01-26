@@ -5,6 +5,7 @@ import { useState } from 'react';
 const IframeA: React.FC = () => {
   const [data, setData] = useState(null);
   useEventListener('message', (e) => {
+    console.log('%c IframeA message listen:', 'color: red', e);
     setData(e.data);
   });
 
@@ -13,8 +14,7 @@ const IframeA: React.FC = () => {
       <iframe
         // height	iframe的高度，默认150px
         height={160}
-        // src='http://localhost:5174/iframeB'
-        src='https://baidu.com'
+        src='http://localhost:5174/iframeB'
         onError={(e) => {
           console.log('%c e:', 'color: red', e);
         }}

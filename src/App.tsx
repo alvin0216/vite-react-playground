@@ -1,6 +1,7 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import IframeA from './Iframes/IframeA';
 import IframeB from './Iframes/IframeB';
+import IframeC from './Iframes/IframeC';
 
 const router = createBrowserRouter([
   {
@@ -10,6 +11,10 @@ const router = createBrowserRouter([
   {
     path: 'iframeB',
     element: <IframeB />,
+  },
+  {
+    path: 'iframeC',
+    element: <IframeC />,
   },
 ]);
 const App: React.FC = () => {
