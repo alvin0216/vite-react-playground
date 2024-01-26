@@ -1,5 +1,7 @@
 declare interface StoreState {
-  smbInfo?: object;
+  smbInfo?: {
+    [key: string]: string;
+  };
   hypothesis?: object;
   envConfig?: object;
   betaEnvConfig?: object;

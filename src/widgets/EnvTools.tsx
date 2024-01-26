@@ -29,7 +29,7 @@ const items: CollapseProps['items'] = [
 ];
 
 const EnvTools: React.FC = () => {
-  return <Collapse defaultActiveKey={['machineInfo']} items={items} />;
+  return <Collapse defaultActiveKey={['smbInfo']} items={items} />;
 };
 
 export default EnvTools;

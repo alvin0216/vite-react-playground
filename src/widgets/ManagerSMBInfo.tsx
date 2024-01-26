@@ -2,21 +2,21 @@ import { ProForm } from '@ant-design/pro-components';
 import TagEditor from '../components/TagEditor';
 import SearchJson from '../components/SearchJson';
 import { useStore } from '../hooks/useStore';
-import DraggableTags from '../components/DraggableTag';
 
 const ManagerSMBInfo: React.FC = () => {
-  const [{ smbInfo }] = useStore();
+  const [{ smbInfo }, setStore] = useStore();
   return (
     <>
       <ProForm layout='horizontal' wrapperCol={{ span: 24 }} submitter={false}>
-        <ProForm.Item label='Country'>
-          <DraggableTags />
-        </ProForm.Item>
-
-        <ProForm.Item label='Offlie' name='EntryUrl' wrapperCol={{ span: 12 }} extra='WebAlwasg.'>
+        <ProForm.Item label='Serial Number' name='EntryUrl' wrapperCol={{ span: 12 }} extra='WebAlwasg.'>
           <TagEditor />
         </ProForm.Item>
-        <SearchJson json={smbInfo!} />
+        <ProForm.Item label='Serial Number' extra='manager my series number'></ProForm.Item>
+
+        <div>CD Device</div>
+        <div></div>
+
+        <SearchJson />
       </ProForm>
     </>
   );
