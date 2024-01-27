@@ -18,6 +18,8 @@ async function main() {
 
   // ...
   // diff
+
+  // json
 }
 
 main();
