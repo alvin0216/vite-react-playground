@@ -4,6 +4,12 @@ export const defaultCmdList: CmdItem[] = [
     title: 'Code Diff Generator',
     subTitle: 'Prepare for SSRB',
     template: 'cd [repo]\ngit diff [tagA] [tagB] -- . ":!package.json" > [repo]/[v1]-[v2].diff',
-    variables: {},
+    variables: {
+      '[repo]': '',
+      '[tagA]': '',
+      '[tagB]': '',
+      '[v1]': '',
+      '[v2]': '',
+    },
   },
 ];
