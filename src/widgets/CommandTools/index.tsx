@@ -14,36 +14,29 @@ const CommandTools: React.FC = () => {
   const [cmdList, setCmdList] = useState<CmdItem[]>(defaultCmdList);
   const [expandedRowKeys, setExpandedRowKeys] = useState<readonly Key[]>([]);
 
-  console.log('%c 111:', 'color: red', cmdList);
   return (
     <ProList<CmdItem>
       rowKey='id'
       headerTitle='Command List'
       className='command-list'
       dataSource={cmdList}
-      onDataSourceChange={setCmdList}
-      expandable={{ expandedRowKeys, onExpandedRowsChange: setExpandedRowKeys }}
-      onChange={(...args) => {
-        console.log('%c onChange:', 'color: red', args);
+      onDataSourceChange={(list) => {
+        setCmdList(
+          produce(list!, (draft) => {
+            draft.forEach((target) => {
+              const regex = /\[(.*?)\]/g;
+              const vars: { [key: string]: string } = {};
+              target.template.match(regex)?.forEach((k) => {
+                vars[k] = target.variables[k] || '';
+              });
+              target.variables = vars;
+            });
+          })
+        );
       }}
+      expandable={{ expandedRowKeys, onExpandedRowsChange: setExpandedRowKeys }}
       editable={{
-        onSave: async (key, record) => {
-          setCmdList(
-            produce(cmdList!, (draft) => {
-              const target = draft.find((c) => c.id === key);
-              if (target) {
-                const regex = /\[(.*?)\]/g;
-                const vars: { [key: string]: string } = {};
-                record.template.match(regex)?.forEach((k) => {
-                  vars[k] = target.variables[k] || '';
-                });
-                console.log(vars, record.template);
-                target.variables = vars;
-              }
-            })
-          );
-          return true;
-        },
+        onSave: async () => true,
       }}
       metas={{
         title: { dataIndex: 'title' },
@@ -60,11 +53,18 @@ const CommandTools: React.FC = () => {
           dataIndex: 'variables',
           editable: false,
           render: (text, row) => (
-            <>
-              {row.template}
-              <p> {JSON.stringify(row.variables)}</p>
-              <PannelRight key={row.template} row={row} />
-            </>
+            <PannelRight
+              key={row.template}
+              row={row}
+              onChange={(variables) => {
+                setCmdList(
+                  produce(cmdList, (draft) => {
+                    const target = draft.find((d) => d.id === row.id)!;
+                    target.variables = variables;
+                  })
+                );
+              }}
+            />
           ),
         },
         description: {

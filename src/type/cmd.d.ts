@@ -3,5 +3,9 @@ declare interface CmdItem {
   title: string;
   subTitle: string;
   template: string;
-  variables: { [key: string]: string };
+  variables: StringObject;
+}
+
+declare interface StringObject {
+  [key: string]: string;
 }

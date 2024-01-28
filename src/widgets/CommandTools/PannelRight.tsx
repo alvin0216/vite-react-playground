@@ -2,9 +2,10 @@ import { ProDescriptions } from '@ant-design/pro-components';
 
 interface PannelRightProps {
   row: CmdItem;
+  onChange(variables: StringObject): void;
 }
 
-const PannelRight: React.FC<PannelRightProps> = ({ row }) => {
+const PannelRight: React.FC<PannelRightProps> = ({ row, onChange }) => {
   const { variables } = row;
   return (
     <ProDescriptions
@@ -14,8 +15,8 @@ const PannelRight: React.FC<PannelRightProps> = ({ row }) => {
       layout='horizontal'
       dataSource={variables}
       editable={{
-        onSave: async (keypath, newInfo, oriInfo) => {
-          console.log(keypath, newInfo, oriInfo);
+        onSave: async (keypath, newInfo) => {
+          onChange(newInfo);
           return true;
         },
       }}
