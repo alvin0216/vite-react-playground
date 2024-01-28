@@ -1,4 +1,4 @@
-html {
+/* html {
   font-size: 4px;
 }
 
@@ -9,4 +9,8 @@ html {
 
 .main-tabs .ant-tabs-tabpane {
   padding: 24px;
+} */
+
+pre {
+  margin: 0 !important;
 }

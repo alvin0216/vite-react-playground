@@ -2,8 +2,11 @@ import { PlusOutlined } from '@ant-design/icons';
 import type { ActionType, ProColumns } from '@ant-design/pro-components';
 import { EditableProTable, ProCard, ProFormField } from '@ant-design/pro-components';
 import { mock } from 'mockjs';
-import { Button, Form } from 'antd';
+import { Button, Form, Typography, Table } from 'antd';
 import React, { useRef, useState } from 'react';
+import CustomizePannel from '../CommandHelper/CustomizePannel';
+
+const { Paragraph } = Typography;
 
 const waitTime = (time: number = 100) => {
   return new Promise((resolve) => {
@@ -15,23 +18,21 @@ const waitTime = (time: number = 100) => {
 
 type DataSourceType = {
   id: React.Key;
-  sn: string;
-  desc: string;
-  index: number;
+  title: string;
+  template: string;
+  variables?: string[];
 };
 
 const defaultData: DataSourceType[] = [
   {
     id: mock('@guid'),
-    sn: 'asdk',
-    desc: 'xx',
-    index: 0,
+    title: 'asdk',
+    template: 'git diff [tagA] [tagB] -- . "!package-lock.json"',
   },
   {
     id: mock('@guid'),
-    sn: 'asdk2',
-    desc: 'xx',
-    index: 1,
+    title: 'asdk2',
+    template: 'xx',
   },
 ];
 
@@ -42,28 +43,24 @@ const CustomizeSN: React.FC = () => {
   const [form] = Form.useForm();
   const handleCreate = () => actionRef.current?.addEditRecord?.({ id: mock('@guid'), sn: '', desc: '' });
 
+  console.log(321, Table.EXPAND_COLUMN);
   const columns: ProColumns<DataSourceType>[] = [
     {
-      title: 'Serial Number',
-      dataIndex: 'sn',
+      title: 'Title',
+      dataIndex: 'title',
+      width: '20%',
+      formItemProps: { rules: [{ required: true }] },
+    },
+    {
+      title: 'Template',
+      dataIndex: 'template',
+      valueType: 'code',
 
       formItemProps: { rules: [{ required: true }] },
       width: '30%',
     },
-
     {
-      title: 'Description',
-      dataIndex: 'desc',
-      width: '20%',
-      formItemProps: { rules: [{ required: true }] },
-    },
-    {
-      title: 'Description2',
-      dataIndex: 'desc',
-      width: '20%',
-    },
-    {
-      title: '操作',
+      title: 'Operation',
       valueType: 'option',
       width: 250,
       render: (text, record, _, action) => [
@@ -84,9 +81,6 @@ const CustomizeSN: React.FC = () => {
           }}>
           移除
         </a>,
-        <EditableProTable.RecordCreator key='copy' record={{ ...record, id: mock('@guid') }}>
-          <a>复制此项到末尾</a>
-        </EditableProTable.RecordCreator>,
       ],
     },
   ];
@@ -118,7 +112,14 @@ const CustomizeSN: React.FC = () => {
           onChange: setEditableRowKeys,
           actionRender: (row, config, dom) => [dom.save, dom.cancel, dom.delete],
         }}
+        expandable={{
+          indentSize: 1500,
+          // expandIcon: ({ expanded, onExpand, record }) => null,
+          // expandedRowRender: (record) => <p style={{ margin: 0 }}>{record.title}</p>,
+          expandedRowRender: (record) => <CustomizePannel />,
+        }}
       />
+
       <ProCard title='List' headerBordered collapsible defaultCollapsed>
         <ProFormField
           ignoreFormItem

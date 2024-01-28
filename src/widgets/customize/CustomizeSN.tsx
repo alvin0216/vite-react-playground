@@ -2,9 +2,9 @@ import { PlusOutlined } from '@ant-design/icons';
 import type { ActionType, ProColumns } from '@ant-design/pro-components';
 import { EditableProTable, ProCard, ProFormField } from '@ant-design/pro-components';
 import { mock } from 'mockjs';
-import { Button, Form } from 'antd';
+import { Button, Form, Typography } from 'antd';
 import React, { useRef, useState } from 'react';
-
+const { Paragraph } = Typography;
 const waitTime = (time: number = 100) => {
   return new Promise((resolve) => {
     setTimeout(() => {
@@ -46,7 +46,6 @@ const CustomizeSN: React.FC = () => {
     {
       title: 'Serial Number',
       dataIndex: 'sn',
-
       formItemProps: { rules: [{ required: true }] },
       width: '30%',
     },
