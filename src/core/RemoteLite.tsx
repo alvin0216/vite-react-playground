@@ -1,4 +1,4 @@
-import React, { Suspense, lazy, memo, useEffect, useMemo, useState } from 'react';
+import React, { Suspense, lazy, memo, useMemo } from 'react';
 
 const RemoteLite: React.FC = memo(() => {
   const Remote = useMemo(
