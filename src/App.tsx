@@ -1,5 +1,6 @@
-import { atom, useRecoilValue, useSetRecoilState } from 'recoil';
+import { atom, selector, useRecoilValue, useSetRecoilState } from 'recoil';
 import { useEventTarget } from 'ahooks';
+import { Suspense } from 'react';
 
 const todoState = atom({ key: 'to', default: ['default'] as string[] });
 
@@ -29,6 +30,24 @@ const TodoList = () => {
   );
 };
 
+const countState = selector({
+  key: 'lastest',
+  get: async ({ get }) => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        resolve(get(todoState).length);
+      }, 3000);
+    }) as Promise<number>
+    return get(todoState).length;
+  },
+});
+
+const Count = () => {
+  const count = useRecoilValue(countState);
+
+  return <div>Count {count}</div>;
+};
+
 const Sibling = () => {
   console.log('render Sibling');
   return null;
@@ -41,6 +60,9 @@ const App: React.FC = () => {
       <TextInput />
       <TodoList />
       <Sibling />
+      <Suspense fallback='loading..............'>
+        <Count />
+      </Suspense>
     </>
   );
 };
