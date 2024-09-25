@@ -1,5 +1,3 @@
-import './style.css';
-
 import { FC, useRef, useState } from 'react';
 
 import { useMount } from 'ahooks';
