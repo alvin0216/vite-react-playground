@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
 
 import { Button } from 'antd';
+import { useMount } from 'ahooks';
 
-const mockText =
-  '具体来说，可以使用 JavaScript 中的 setInterval() 函数和字符串截取方法来模拟打字机效果。例如，在实现 ChatGPT 的回复效果时，可以将回复内容以字符串的形式存储在一个数组中，然后使用 setInterval() 函数定时截取字符串并更新到页面上，从而实现打字机效果。';
+let controller = new AbortController();
 const App: React.FC = () => {
   const [streaming, setStreaming] = useState(false);
-  const [streamText, setStreamText] = useState(mockText);
+  const [streamText, setStreamText] = useState('');
   const [index, setIndex] = useState(0);
   const [paused, setPaused] = useState(false);
 
@@ -32,11 +32,54 @@ const App: React.FC = () => {
     setPaused(false);
     setIndex(0);
     // run Error paused
+
+    controller = new AbortController();
+    fetch('http://127.0.0.1:5200/stream', { signal: controller.signal })
+      .then((response) => {
+        const reader = response.body?.getReader();
+
+        if (reader) {
+          // 获取 reader
+
+          // 读取数据
+          return reader.read().then(function process({ done, value }) {
+            if (done) {
+              console.log('Stream finished');
+              setStreaming(false);
+              return;
+            }
+            const decoder = new TextDecoder('utf-8');
+            const text = decoder.decode(value, { stream: true });
+            setStreamText(text);
+
+            // 读取下一段数据
+            return reader.read().then(process);
+          });
+        }
+      })
+      .catch((e) => {
+        console.log('Error', e);
+        setStreaming(false);
+
+        if (e.name === 'AbortError') {
+          console.log('abort');
+        }
+      });
+  };
+
+  useMount(run);
+
+  const pause = () => {
+    setPaused(true);
+    controller.abort();
   };
 
   return (
     <>
       <div className='flex space-x-4'>
+        <Button type='primary' onClick={run}>
+          run
+        </Button>
         <Button type='primary' onClick={() => setStreamText((pre) => pre + mockText)}>
           setStreamText
         </Button>
@@ -45,7 +88,7 @@ const App: React.FC = () => {
           setStreamText Long
         </Button>
 
-        <Button type='primary' disabled={!showPause} onClick={() => setPaused(true)}>
+        <Button type='primary' disabled={!showPause} onClick={pause}>
           setPaused
         </Button>
 
@@ -57,6 +100,7 @@ const App: React.FC = () => {
       <ul>
         <li>index: {index}</li>
         <li>typing: {String(typing)}</li>
+        <li>streaming: {String(streaming)}</li>
         <li>paused: {String(paused)}</li>
         <li>done: {String(done)}</li>
       </ul>
