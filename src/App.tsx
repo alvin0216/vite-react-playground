@@ -1,36 +1,68 @@
-import { FC, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 
-import { useMount } from 'ahooks';
+import { Button } from 'antd';
 
-const TextBox: FC<{ text: string }> = ({ text }) => {
-  const ref = useRef<HTMLDivElement>(null);
+const mockText =
+  '具体来说，可以使用 JavaScript 中的 setInterval() 函数和字符串截取方法来模拟打字机效果。例如，在实现 ChatGPT 的回复效果时，可以将回复内容以字符串的形式存储在一个数组中，然后使用 setInterval() 函数定时截取字符串并更新到页面上，从而实现打字机效果。';
+const App: React.FC = () => {
+  const [streaming, setStreaming] = useState(false);
+  const [streamText, setStreamText] = useState(mockText);
+  const [index, setIndex] = useState(0);
+  const [paused, setPaused] = useState(false);
 
-  useMount(() => {
-    ref.current?.scrollIntoView({ behavior: 'smooth' });
-  });
+  const typing = index < streamText.length && !paused;
+  const done = !typing && !streaming;
+  const renderText = streamText.slice(0, index);
+
+  useEffect(() => {
+    const typingTimeout = setTimeout(() => {
+      if (typing) {
+        // console.log('typing, should scroll here...');
+        setIndex((pre) => pre + 1);
+      } else clearTimeout(typingTimeout);
+    });
+    return () => clearTimeout(typingTimeout);
+  }, [typing, index]);
+
+  const run = () => {
+    setStreaming(true);
+    setStreamText('');
+    setPaused(false);
+    setIndex(0);
+  };
+
+  const showPause = typing || streaming;
 
   return (
-    <div ref={ref} className='message h-80 mb-4 bg-slate-400'>
-      TextBox: {text}
-    </div>
-  );
-};
+    <>
+      <div className='flex space-x-4'>
+        <Button type='primary' onClick={() => setStreamText((pre) => pre + mockText)}>
+          setStreamText
+        </Button>
 
-const App = () => {
-  const [list, setList] = useState<string[]>([]);
+        <Button type='primary' onClick={() => setStreamText((pre) => pre + pre)}>
+          setStreamText Long
+        </Button>
 
-  return (
-    <div>
-      <button onClick={() => setList((pre) => [...pre, String(pre.length)])}>add</button>
+        <Button type='primary' disabled={!showPause} onClick={() => setPaused(true)}>
+          setPaused
+        </Button>
 
-      <div className='m-auto mt-2 w-100 h-120 border border-solid border-red-900 flex flex-col-reverse overflow-y-auto'>
-        <div>
-          {list.map((t) => (
-            <TextBox key={t} text={t} />
-          ))}
-        </div>
+        <Button type='primary' danger disabled={!done} onClick={run}>
+          refresh
+        </Button>
       </div>
-    </div>
+
+      <ul>
+        <li>index: {index}</li>
+        <li>typing: {String(typing)}</li>
+        <li>paused: {String(paused)}</li>
+        <li>done: {String(done)}</li>
+      </ul>
+
+      <p>{renderText}</p>
+    </>
   );
 };
+
 export default App;
