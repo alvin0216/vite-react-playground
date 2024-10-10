@@ -31,8 +31,6 @@ const App: React.FC = () => {
     setStreamText('');
     setPaused(false);
     setIndex(0);
-    // run Error paused
-
     controller = new AbortController();
     fetch('http://127.0.0.1:5200/stream', { signal: controller.signal })
       .then((response) => {
@@ -58,9 +56,7 @@ const App: React.FC = () => {
         }
       })
       .catch((e) => {
-        console.log('Error', e);
         setStreaming(false);
-
         if (e.name === 'AbortError') {
           console.log('abort');
         }
