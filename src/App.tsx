@@ -3,12 +3,13 @@ import { useEffect, useState } from 'react';
 import { Button } from 'antd';
 import { useMount } from 'ahooks';
 
-let controller = new AbortController();
+let controller: AbortController | null;
 const App: React.FC = () => {
   const [streaming, setStreaming] = useState(false);
   const [streamText, setStreamText] = useState('');
   const [index, setIndex] = useState(0);
   const [paused, setPaused] = useState(false);
+  const [error, setError] = useState<string>();
 
   const typing = index < streamText.length && !paused;
   const done = !typing && !streaming;
@@ -23,14 +24,19 @@ const App: React.FC = () => {
         setIndex((pre) => pre + 1);
       } else clearTimeout(typingTimeout);
     });
-    return () => clearTimeout(typingTimeout);
+    return () => {
+      clearTimeout(typingTimeout);
+      controller = null;
+    };
   }, [typing, index]);
 
   const run = () => {
     setStreaming(true);
     setStreamText('');
+    setError(undefined);
     setPaused(false);
     setIndex(0);
+
     controller = new AbortController();
     fetch('http://127.0.0.1:5200/stream', { signal: controller.signal })
       .then((response) => {
@@ -57,31 +63,23 @@ const App: React.FC = () => {
       })
       .catch((e) => {
         setStreaming(false);
-        if (e.name === 'AbortError') {
-          console.log('abort');
-        }
+        console.log(e);
+        if (e.name !== 'AbortError') setError(e.message);
       });
   };
 
-  useMount(run);
-
   const pause = () => {
     setPaused(true);
-    controller.abort();
+    controller?.abort();
   };
+
+  useMount(run);
 
   return (
     <>
       <div className='flex space-x-4'>
         <Button type='primary' onClick={run}>
           run
-        </Button>
-        <Button type='primary' onClick={() => setStreamText((pre) => pre + mockText)}>
-          setStreamText
-        </Button>
-
-        <Button type='primary' onClick={() => setStreamText((pre) => pre + pre)}>
-          setStreamText Long
         </Button>
 
         <Button type='primary' disabled={!showPause} onClick={pause}>
@@ -98,7 +96,9 @@ const App: React.FC = () => {
         <li>typing: {String(typing)}</li>
         <li>streaming: {String(streaming)}</li>
         <li>paused: {String(paused)}</li>
+
         <li>done: {String(done)}</li>
+        <li>error: {String(error)}</li>
       </ul>
 
       <p>{renderText}</p>
