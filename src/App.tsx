@@ -12,6 +12,8 @@ const App: React.FC = () => {
 
   const typing = index < streamText.length && !paused;
   const done = !typing && !streaming;
+
+  const showPause = !done;
   const renderText = streamText.slice(0, index);
 
   useEffect(() => {
@@ -29,9 +31,8 @@ const App: React.FC = () => {
     setStreamText('');
     setPaused(false);
     setIndex(0);
+    // run Error paused
   };
-
-  const showPause = typing || streaming;
 
   return (
     <>
